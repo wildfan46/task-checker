@@ -147,6 +147,7 @@ def check_grass_task(
     }
 
 
+# TODO AL : This check isn't working right
 def check_driveway_snow_task(
     forecast, project_id: str, section_id: str
 ) -> Dict:
