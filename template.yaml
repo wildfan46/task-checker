@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CI/CD-managed Lambda
+
+Globals:
+  Function:
+    # For Python:
+    Runtime: python3.12
+    # For Node, use:
+    # Runtime: nodejs20.x
+    MemorySize: 256
+    Timeout: 30
+    Architectures: [arm64]   # or [arm64]
+    Tracing: Active            # X-Ray
+    Environment:
+      Variables:
+        LAT: '{{resolve:ssm:/task-checker/prod/LAT}}'
+        LON: '{{resolve:ssm:/task-checker/prod/LON}}'
+        PIRATE_PARAM: '/task-checker/prod/PIRATE_API_KEY'
+        TODOIST_PARAM: '/task-checker/prod/TODOIST_API_TOKEN'
+        DELANO_HOUSE_PROJECT_ID: '{{resolve:ssm:/task-checker/prod/DELANO_HOUSE_PROJECT_ID}}'
+        DELANO_HOUSE_MAINTENANCE_SECTION_ID: '{{resolve:ssm:/task-checker/prod/DELANO_HOUSE_MAINTENANCE_SECTION_ID}}'
+        PERSONAL_PROJECT_ID: '{{resolve:ssm:/task-checker/prod/PERSONAL_PROJECT_ID}}'
+        PERSONAL_FUN_SECTION_ID: '{{resolve:ssm:/task-checker/prod/PERSONAL_FUN_SECTION_ID}}'
+        PERSONAL_PHYSICAL_HEALTH_SECTION_ID: '{{resolve:ssm:/task-checker/prod/PERSONAL_PHYSICAL_HEALTH_SECTION_ID}}'
+
+Resources:
+  AppLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: task-checker-processor
+      CodeUri: src/            # or wherever your code lives
+      Handler: app.lambda_handler  # Python example
+      Description: Deployed by GitHub Actions via SAM
+      Layers:
+        - arn:aws:lambda:us-east-1:770693421928:layer:Klayers-p312-arm64-requests:16
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - Statement:
+            Effect: Allow
+            Action:
+              - ssm:GetParameter
+              - ssm:GetParameters
+              - ssm:GetParametersByPath
+            Resource: arn:aws:ssm:us-east-1:710396653413:parameter/task-checker/prod/*
+        - Statement:
+            Effect: Allow
+            Action:
+              - kms:Decrypt
+            Resource: arn:aws:kms:us-east-1:710396653413:key/3f3e83d7-1c7e-42ec-a8a8-6a643958e3c6
+      Events:
+        # If your Lambda is scheduled (example daily at 6:00 AM America/Chicago)
+        Daily6am:
+          Type: Schedule
+          Properties:
+            # Convert 6:00 AM America/Chicago to UTC for cron; adjust if needed.
+            # Example: 11:00 UTC during CDT, 12:00 UTC during CST. Pick one or keep it simple:
+            Schedule: cron(0 11 * * ? *)  # 11:00 UTC daily
+            Name: daily-6am-central
+            Description: Trigger Lambda daily at 6:00 AM Central
+
+Outputs:
+  FunctionName:
+    Value: !Ref AppLambda
