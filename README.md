@@ -1,6 +1,6 @@
 # Task Checker Lambda
 
-[![CI/CD](https://github.com/wildfan46/task-checker-lambda/actions/workflows/deploy.yml/badge.svg)](https://github.com/wildfan46/task-checker-lambda/actions/workflows/deploy.yml)
+[![CI/CD](https://github.com/wildfan46/task-checker/actions/workflows/deploy.yml/badge.svg)](https://github.com/wildfan46/task-checker/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 AWS Lambda function (deployed via [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html)) that creates Todoist tasks based on weather and other criteria. Runs daily, integrating with Pirate Weather and Todoist APIs.
