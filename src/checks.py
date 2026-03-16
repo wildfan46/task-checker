@@ -147,7 +147,6 @@ def check_grass_task(
     }
 
 
-# TODO AL : This check isn't working right
 def check_driveway_snow_task(
     forecast, project_id: str, section_id: str
 ) -> Dict:
@@ -168,3 +167,16 @@ def check_driveway_snow_task(
     else:
         print("No snow in the forecast")
     return None
+
+
+def check_stocks(
+        market_data, project_id: str, section_id: str
+) -> Dict:
+    # TODO AL : Check if any stocks are in my watch list and match any of the "buy research criteria"
+    # TODO AL : Check if any stocks I own match any of the "sell research criteria"
+
+    return {
+        "name": "Review stock portfolio",
+        "project_id": project_id,
+        "section_id": section_id
+    }

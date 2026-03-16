@@ -5,6 +5,7 @@ import todoist
 
 from datetime import datetime, timedelta, timezone
 
+
 def lambda_handler(event, context):
     config = get_config()
     yesterday_utc = datetime.now(timezone.utc) - timedelta(days=1)
