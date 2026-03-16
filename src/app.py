@@ -9,7 +9,13 @@ from datetime import datetime, timedelta, timezone
 def lambda_handler(event, context):
     config = get_config()
     yesterday = datetime.now(timezone.utc) - timedelta(days=1)
-    yesterday_utc = int(yesterday.replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
+    yesterday_midnight = yesterday.replace(
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0
+    )
+    yesterday_utc = int(yesterday_midnight.timestamp())
     todays_forecast = get_pirate_forecast(
         config['PIRATE_API_KEY'],
         config['LAT'],
