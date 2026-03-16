@@ -8,7 +8,8 @@ from datetime import datetime, timedelta, timezone
 
 def lambda_handler(event, context):
     config = get_config()
-    yesterday_utc = datetime.now(timezone.utc) - timedelta(days=1)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
+    yesterday_utc = int(yesterday.replace(hour=0, minute=0, second=0, microsecond=0).timestamp())
     todays_forecast = get_pirate_forecast(
         config['PIRATE_API_KEY'],
         config['LAT'],
@@ -18,7 +19,7 @@ def lambda_handler(event, context):
         config['PIRATE_API_KEY'],
         config['LAT'],
         config['LON'],
-        date=yesterday_utc.timestamp()
+        date=yesterday_utc
     )
 
     candidate_tasks = get_task_configurations(config)
