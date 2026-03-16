@@ -172,9 +172,10 @@ def check_driveway_snow_task(
 def check_stocks(
         market_data, project_id: str, section_id: str
 ) -> Dict:
-    # TODO AL : Check if any stocks are in my watch list and match any of the "buy research criteria"
-    # TODO AL : Check if any stocks I own match any of the "sell research criteria"
-
+    # TODO AL : Check if any stocks are in my watch list
+    #  and match any of the "buy research criteria"
+    # TODO AL : Check if any stocks I own match any of
+    #  the "sell research criteria"
     return {
         "name": "Review stock portfolio",
         "project_id": project_id,
