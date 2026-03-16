@@ -3,20 +3,28 @@ from weather import get_pirate_forecast
 from rules import get_task_configurations
 import todoist
 
+from datetime import datetime, timedelta, timezone
 
 def lambda_handler(event, context):
     config = get_config()
-    forecast = get_pirate_forecast(
+    yesterday_utc = datetime.now(timezone.utc) - timedelta(days=1)
+    todays_forecast = get_pirate_forecast(
         config['PIRATE_API_KEY'],
         config['LAT'],
         config['LON']
+    )
+    yesterdays_weather = get_pirate_forecast(
+        config['PIRATE_API_KEY'],
+        config['LAT'],
+        config['LON'],
+        date=yesterday_utc.timestamp()
     )
 
     candidate_tasks = get_task_configurations(config)
 
     tasks_to_create = []
 
-    if not forecast:
+    if not todays_forecast and not yesterdays_weather:
         tasks_to_create.append({
             "name": "Investigate Weather API Failure",
             "project_id": config['PERSONAL_PROJECT_ID'],
@@ -24,11 +32,18 @@ def lambda_handler(event, context):
         })
     else:
         for task_cfg in candidate_tasks:
-            task = task_cfg["checking_function"](
-                forecast,
-                task_cfg["project_id"],
-                task_cfg["section_id"]
-            )
+            if task_cfg["weather_to_check"] == "today":
+                task = task_cfg["checking_function"](
+                    todays_forecast,
+                    task_cfg["project_id"],
+                    task_cfg["section_id"]
+                )
+            else:
+                task = task_cfg["checking_function"](
+                    yesterdays_weather,
+                    task_cfg["project_id"],
+                    task_cfg["section_id"]
+                )
             if task:
                 tasks_to_create.append(task)
 

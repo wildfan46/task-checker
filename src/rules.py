@@ -8,31 +8,36 @@ def get_task_configurations(config):
             "name": "spot treat weeds",
             "project_id": config["DELANO_HOUSE_PROJECT_ID"],
             "section_id": config["DELANO_HOUSE_MAINTENANCE_SECTION_ID"],
-            "checking_function": checks.check_weed_task
+            "checking_function": checks.check_weed_task,
+            "weather_to_check": "today"
         },
         {
             "name": "grill dinner tonight",
             "project_id": config["PERSONAL_PROJECT_ID"],
             "section_id": config["PERSONAL_FUN_SECTION_ID"],
-            "checking_function": checks.check_grilling_task
+            "checking_function": checks.check_grilling_task,
+            "weather_to_check": "today"
         },
         {
             "name": "walk",
             "project_id": config["PERSONAL_PROJECT_ID"],
             "section_id": config["PERSONAL_PHYSICAL_HEALTH_SECTION_ID"],
-            "checking_function": checks.check_walk_task
+            "checking_function": checks.check_walk_task,
+            "weather_to_check": "today"
         },
         {
             "name": "cut grass",
             "project_id": config["DELANO_HOUSE_PROJECT_ID"],
             "section_id": config["DELANO_HOUSE_MAINTENANCE_SECTION_ID"],
-            "checking_function": checks.check_grass_task
+            "checking_function": checks.check_grass_task,
+            "weather_to_check": "today"
         },
         {
             "name": "clear driveway",
             "project_id": config["DELANO_HOUSE_PROJECT_ID"],
             "section_id": config["DELANO_HOUSE_MAINTENANCE_SECTION_ID"],
-            "checking_function": checks.check_driveway_snow_task
+            "checking_function": checks.check_driveway_snow_task,
+            "weather_to_check": "yesterday"
         },
     ]
 

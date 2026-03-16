@@ -1,9 +1,11 @@
 import requests
 
 
-def get_pirate_forecast(key: str, lat: str, lon: str):
+def get_pirate_forecast(key: str, lat: str, lon: str, date=None):
     endpoint = (
         f"https://api.pirateweather.net/forecast/{key}/{lat},{lon}"
+    ) if not date else (
+        f"https://api.pirateweather.net/forecast/{key}/{lat},{lon},{date}"
     )
     params = {"units": "us", "exclude": "minutely,alerts,flags"}
     try:
