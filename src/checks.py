@@ -169,9 +169,40 @@ def check_driveway_snow_task(
     return None
 
 
+def check_chair_cushion_task(
+    forecast, project_id: str, section_id: str
+) -> Dict:
+
+    """Return candidate for bringing in the couch cushions."""
+    today = _today_date_utc()
+    tomorrow = _today_date_utc() + timedelta(days=1)
+    hourly = forecast.get("hourly", {}).get("data", [])
+    today_hours = [
+        h for h in hourly
+        if (
+            datetime.utcfromtimestamp(h["time"]).date() == today
+            and datetime.utcfromtimestamp(h["time"]).hour >= 20
+        ) or (
+            datetime.utcfromtimestamp(h["time"]).date() == tomorrow
+            and datetime.utcfromtimestamp(h["time"]).hour <= 8
+        )
+    ]
+    if any(h.get("windGust", 0) > 30.0 for h in today_hours):
+        print("Weather calling for gusts, better bring in the cushions")
+        return {
+            "name": "Bring in chair cushions",
+            "project_id": project_id,
+            "section_id": section_id
+        }
+    print("No strong gusts in the forecast, can leave cushions out")
+    return None
+
+
 def check_stocks(
         market_data, project_id: str, section_id: str
 ) -> Dict:
+    # TODO AL : Check if I should add any stocks to my
+    #  watch list based on "stock research criteria"
     # TODO AL : Check if any stocks are in my watch list
     #  and match any of the "buy research criteria"
     # TODO AL : Check if any stocks I own match any of

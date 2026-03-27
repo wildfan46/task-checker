@@ -39,6 +39,13 @@ def get_task_configurations(config):
             "checking_function": checks.check_driveway_snow_task,
             "weather_to_check": "yesterday"
         },
+        {
+            "name": "bring in cushions",
+            "project_id": config["DELANO_HOUSE_PROJECT_ID"],
+            "section_id": config["DELANO_HOUSE_MAINTENANCE_SECTION_ID"],
+            "checking_function": checks.check_chair_cushion_task,
+            "weather_to_check": "today"
+        },
     ]
 
 
